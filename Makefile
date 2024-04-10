@@ -33,28 +33,29 @@ CFLAGS = -Wall -Wextra -Werror -g
 
 all : $(NAME)
 
-$(NAME) : libft printf c_make s_make
+$(NAME) : $(CLIENT_NAME) $(SERVER_NAME)
 
-bonus: libft printf bonus_c_make bonus_s_make
+bonus: $(CLIENT_NAME_BONUS) $(SERVER_NAME_BONUS)
 
-libft :
-	@make -sC libft
+$(CLIENT_NAME) : $(CLIENT_OBJ)
 	@make bonus -sC libft
-
-printf :
 	@make -sC ft_printf
+	$(CC) $(CFLAGS) $(CLIENT_OBJ) $(LIBFT) $(PRINTF) -o $(CLIENT_NAME)
 
-c_make : $(CLIENT_OBJ)
-		$(CC) $(CFLAGS) $(CLIENT_OBJ) $(LIBFT) $(PRINTF) -o $(CLIENT_NAME)
+$(SERVER_NAME): $(SERVER_OBJ)
+	@make bonus -sC libft
+	@make -sC ft_printf
+	$(CC) $(CFLAGS) $(SERVER_OBJ) $(LIBFT) $(PRINTF) -o $(SERVER_NAME)
 
-s_make : $(SERVER_OBJ)
-		$(CC) $(CFLAGS) $(SERVER_OBJ) $(LIBFT) $(PRINTF) -o $(SERVER_NAME)
+$(CLIENT_NAME_BONUS): $(CLIENT_OBJ_BONUS)
+	@make bonus -sC libft
+	@make -sC ft_printf
+	$(CC) $(CFLAGS) $(CLIENT_OBJ_BONUS) $(LIBFT) $(PRINTF) -o $(CLIENT_NAME_BONUS)
 
-bonus_c_make : $(CLIENT_OBJ_BONUS)
-		$(CC) $(CFLAGS) $(CLIENT_OBJ_BONUS) $(LIBFT) $(PRINTF) -o $(CLIENT_NAME_BONUS)
-
-bonus_s_make : $(SERVER_OBJ_BONUS)
-		$(CC) $(CFLAGS) $(SERVER_OBJ_BONUS) $(LIBFT) $(PRINTF) -o $(SERVER_NAME_BONUS)
+$(SERVER_NAME_BONUS): $(SERVER_OBJ_BONUS)
+	@make bonus -sC libft
+	@make -sC ft_printf
+	$(CC) $(CFLAGS) $(SERVER_OBJ_BONUS) $(LIBFT) $(PRINTF) -o $(SERVER_NAME_BONUS)
 
 clean :
 	@make clean -sC libft
